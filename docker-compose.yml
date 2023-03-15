@@ -8,5 +8,20 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_URL}
+      TZ: Asia/Seoul
     ports:
       - "3307:3306"
+
+  nginx:
+    container_name: nginx_con_2
+    image: nginx
+    restart: always
+    # build:
+    #   dockerfile: Dockerfile
+    #   context: ./frontend
+    ports:
+      - "80:80"
+    # depends_on:
+    #   - backend
+
+
