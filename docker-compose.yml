@@ -1,12 +1,28 @@
 version: "3"
 services:
   mysql:
-    container_name: mysql_con
-    image: mysql:latest
+    container_name: postgresql_con
+    image: postgres
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_URL}
+      POSTGRES_ROOT_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: Asia/Seoul
     ports:
-      - "3307:3306"
+      - "5432:5432"
+
+  nginx:
+    container_name: nginx_con_2
+    image: nginx
+    restart: always
+    # build:
+    #   dockerfile: Dockerfile
+    #   context: ./frontend
+    ports:
+      - "80:80"
+    # depends_on:
+    #   - backend
+
+
