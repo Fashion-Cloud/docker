@@ -15,6 +15,9 @@ services:
 
   nginx:
     container_name: nginx_con_2
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
     image: nginx
     restart: always
     volumes:
