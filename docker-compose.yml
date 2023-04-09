@@ -17,6 +17,9 @@ services:
     container_name: nginx_con_2
     image: nginx
     restart: always
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
     # build:
     #   dockerfile: Dockerfile
     #   context: ./frontend
