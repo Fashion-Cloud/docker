@@ -1,21 +1,18 @@
 version: "3"
 services:
   spring-boot:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-    image: spring-backend
-    ports:
-      - "8080:8080"
-    container_name: spring-boot
-    restart: on-failure
-    depends_on:
-      - postgresql
+    build: ../backend
+    image: spring-boot
     environment:
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    restart: on-failure
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
 
   postgresql:
     container_name: postgresql
@@ -29,8 +26,6 @@ services:
       TZ: Asia/Seoul
     ports:
       - "5432:5432"
-    # depends_on:
-    #   - backend
 
   # nginx:
   #   build: ./nginx
