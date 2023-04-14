@@ -1,15 +1,24 @@
 version: "3"
 services:
-
-
-  backend:
-    container_name: spring-boot
-    build: ../backend
-    restart: always
+  spring-boot:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: spring-backend
     ports:
-        - '8000:8000'
-  mysql:
-    container_name: postgresql_con
+      - "8080:8080"
+    container_name: spring-boot
+    restart: on-failure
+    depends_on:
+      - postgresql
+    environment:
+      SPRING_DATASOURCE_URL: ${POSTGRES_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  postgresql:
+    container_name: postgresql
     image: postgres
     restart: always
     environment:
@@ -20,17 +29,12 @@ services:
       TZ: Asia/Seoul
     ports:
       - "5432:5432"
-    depends_on:
-      - backend
+    # depends_on:
+    #   - backend
 
-  nginx:
-    container_name: nginx_con_2
-    image: nginx
-    restart: always
-    # build:
-    #   dockerfile: Dockerfile
-    #   context: ./frontend
-    ports:
-      - "80:80"
-
-
+  # nginx:
+  #   build: ./nginx
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
