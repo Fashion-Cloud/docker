@@ -26,9 +26,9 @@ services:
     ports:
       - "5432:5432"
 
-  # nginx:
-  #   build: ./nginx
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - backend
+  nginx:
+     build: ./nginx
+     ports:
+       - "80:80"
+     depends_on:
+       - backend
