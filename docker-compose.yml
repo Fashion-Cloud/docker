@@ -26,9 +26,10 @@ services:
     ports:
       - "5432:5432"
 
-  nginx:
-     build: ./nginx
-     ports:
-       - "80:80"
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
      depends_on:
        - backend
