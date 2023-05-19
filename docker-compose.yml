@@ -2,6 +2,7 @@ version: "3"
 services:
   spring-boot:
     build: ../backend
+    container_name: fc_springboot
     image: spring-boot
     environment:
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
@@ -14,7 +15,7 @@ services:
       - "8080:8080"
 
   postgresql:
-    container_name: postgresql
+    container_name: fc_postgresql
     image: postgres
     restart: always
     environment:
@@ -28,6 +29,15 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: redis
+    container_name: fc_redis
     ports:
       - "6379:6379"
+
+  nginx:
+    build: ./nginx
+    container_name: fc_nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-boot
