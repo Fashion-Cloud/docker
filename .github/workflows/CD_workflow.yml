@@ -34,7 +34,7 @@ jobs:
           port: ${{ secrets.AWS_SSH_PORT }}
           script_stop: true
           script: |
-            cd ~/fashion_cloud/docker #프로젝트 폴더로 이동
+            cd ~/Fashion-Cloud/docker #프로젝트 폴더로 이동
             git pull
             docker-compose up --build #도커 다시 빌드
 
