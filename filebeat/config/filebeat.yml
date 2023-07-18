@@ -1,0 +1,51 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/*.log
+
+output.logstash:
+  enabled: true
+  hosts: ["logstash:5044"]
+
+setup.kibana:
+  host: "http://kibana:5601"
+  username: "elastic"
+  password: "changeme"
+
+
+
+
+
+
+
+
+
+
+
+#filebeat.inputs:
+#  - type: log
+#    enabled: true
+#    paths:
+#
+#     - /log/logfile.log/* # Spring Boot 로그 파일 경로
+#
+##output.elasticsearch:
+##  hosts: ['elasticsearch:9200'] # Elasticsearch 호스트 설정
+#output.logstash:
+##  hosts:
+#  enabled: true
+#  hosts: ["logstash:5044"]
+#  index:  "filebeat"
+#
+##output.elasticsearch:
+##  hosts: ["localhost:9200"]
+##  index:  "logstash-%{+YYYY.MM.dd}"
+#
+#
+#setup.kibana:
+#  host: "http://kibana:5601" # Kibana 호스트 설정
+#
+#setup.template.name: "logstash-template"
+#setup.template.pattern: "logstash-*"
+#

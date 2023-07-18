@@ -1,36 +1,141 @@
 version: "3"
+
+
+
 services:
-  spring-boot:
-    build: ../backend
-    image: spring-boot
-    environment:
-      SPRING_DATASOURCE_URL: ${POSTGRES_URL}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-    restart: on-failure
-    depends_on:
-      - postgresql
+
+  springboot:
+   build: ../backend
+   container_name: springboot
+   image: spring-boot
+   environment:
+     SPRING_DATASOURCE_URL: ${POSTGRES_URL}
+     SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+     SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+   restart: on-failure
+   depends_on:
+     - postgresql
+   ports:
+     - "8080:8080"
+  nginx:
+    container_name: nginx
+
+    build:
+      dockerfile: dockerfile
+      context: ./nginx
     ports:
-      - "8080:8080"
+      - "80:80"
+    volumes:
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    depends_on:
+      - springboot
+
+#
+#    filebeat:
+#      image: docker.elastic.co/beats/filebeat:7.14.0
+#      entrypoint: "filebeat -e -strict.perms=false"
+#
+#      volumes:
+#        - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+#        - /var/lib/docker/containers:/var/lib/docker/containers:ro
+#        - /var/run/docker.sock:/var/run/docker.sock
+#      networks:
+#        - elk
+#
+#    elasticsearch:
+#      image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+#      container_name: elasticsearch
+#      volumes:
+#        - type: bind
+#          source: ./elasticsearch/config/elasticsearch.yml
+#          target: /usr/share/elasticsearch/config/elasticsearch.yml
+#          read_only: true
+#        - type: volume
+#          source: elasticsearch
+#          target: /usr/share/elasticsearch/data
+#      ports:
+#        - "9200:9200"
+#        - "9300:9300"
+#      environment:
+#        ES_JAVA_OPTS: "-Xmx1g -Xms1g"
+#        ELASTIC_PASSWORD: "MyPw123"
+#        # Use single node discovery in order to disable production mode and avoid bootstrap checks
+#        # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+#        discovery.type: single-node
+#      networks:
+#        - elk
+#
+#    logstash:
+#      container_name: library_logstash
+#      image: docker.elastic.co/logstash/logstash:7.15.2
+#      volumes:
+#        - type: bind
+#          source: ./logstash/config/logstash.yml
+#          target: /usr/share/logstash/config/logstash.yml
+#          read_only: true
+#        - type: bind
+#          source: ./logstash/pipeline
+#          target: /usr/share/logstash/pipeline
+#          read_only: true
+#      ports:
+#        - "5044:5044"
+#        - "5000:5000/tcp"
+#        - "5000:5000/udp"
+#        - "9600:9600"
+#      environment:
+#        LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#      networks:
+#        - elk
+#      depends_on:
+#        - elasticsearch
+#
+#    kibana:
+#      container_name: library_kibana
+#      image: docker.elastic.co/kibana/kibana:7.15.2
+#      volumes:
+#        - type: bind
+#          source: ./kibana/config/kibana.yml
+#          target: /usr/share/kibana/config/kibana.yml
+#          read_only: true
+#      ports:
+#        - "5601:5601"
+#
+#      environment:
+#        - ELASTICSEARCH_URL=http://elasticsearch:9200
+#      networks:
+#        - elk
+#      depends_on:
+#        - elasticsearch
+
 
   postgresql:
-    container_name: postgresql
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_ROOT_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      TZ: Asia/Seoul
-    ports:
-      - "5432:5432"
-    depends_on:
-      - backend
+        container_name: postgresql
+        image: postgres
+        restart: always
+        environment:
+          POSTGRES_ROOT_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
+          POSTGRES_USER: ${POSTGRES_USER}
+          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+          POSTGRES_DB: ${POSTGRES_DB}
+          TZ: Asia/Seoul
+        ports:
+          - "5432:5432"
+
 
   redis:
-    image: redis:alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
+          image: redis:alpine
+          container_name: redis
+          ports:
+            - "6379:6379"
+
+
+
+
+
+
+#      #격자점 api호출횟수
+#       #어느 격자점에서 호출했고고
+
 
