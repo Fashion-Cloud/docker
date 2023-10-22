@@ -1,8 +1,5 @@
 version: "3"
 
-volumes:
-  build_folder:
-
 services:
   spring-boot:
     build: ../backend
@@ -43,15 +40,5 @@ services:
     restart: always
     ports:
       - "80:80"
-    volumes:
-      - build_folder:/var/www/frontend
     depends_on:
       - spring-boot
-
-  client:
-    build: ../frontend
-    container_name: client
-    volumes:
-      - ../frontend/:/frontend
-      - build_folder:/frontend/build
-    tty: true
